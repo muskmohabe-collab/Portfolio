@@ -179,6 +179,33 @@
   }
   .quote-meta{ margin-top:1.2rem; font-size:0.8rem; color:var(--muted); letter-spacing:0.04em; }
 
+  /* ---------- Small Words: poem ---------- */
+  .poem{
+    display:grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap:3rem; align-items:start; margin-top:2.6rem;
+  }
+  .poem-art{ margin:0; position:sticky; top:12vh; }
+  .poem-art img{
+    width:100%; height:auto; display:block; border-radius:2px; border:1px solid var(--line);
+    box-shadow: 0 0 40px rgba(227,179,101,0.12);
+  }
+  .poem-title{
+    font-family:'Fraunces', serif; font-style:italic; font-weight:500; color:var(--amber-soft);
+    font-size:clamp(1.5rem, 2.6vw, 1.9rem); margin:0 0 1.4rem 0;
+    text-shadow: 0 0 18px rgba(227,179,101,0.28);
+  }
+  .poem-text p{
+    font-family:'Fraunces', serif; font-weight:400; font-size:1.08rem; line-height:1.85;
+    color:var(--ink); opacity:0.9; margin:0 0 1.4rem 0;
+  }
+  .poem-text p.poem-refrain{
+    font-style:italic; color:var(--amber-soft); opacity:1; font-size:1.25rem;
+    text-align:center; margin:2rem 0; text-shadow: 0 0 14px rgba(227,179,101,0.35);
+  }
+  @media (max-width:780px){
+    .poem{ grid-template-columns: 1fr; gap:2rem; }
+    .poem-art{ position:static; max-width:420px; margin:0 auto; }
+  }
+
   /* ---------- On Repeat ---------- */
   .repeat-row{ display:flex; align-items:center; gap:1.6rem; margin-top:2.5rem; }
   .vinyl{ width:64px; height:64px; border-radius:50%; flex-shrink:0;
@@ -257,9 +284,27 @@
     </div>
   </section>
 
+  <!-- ============ Small Words ============ -->
+  <section id="words">
+    <p class="section-eyebrow">02 · Small Words</p>
+    <h2 class="section-title">A little poetry, now and then</h2>
+    <div class="poem">
+      <figure class="poem-art">
+        <img src="images/beyond/mothers-garden.jpg" alt="Painting of a mother lifting her baby into the air, silhouetted against a sunset" loading="lazy">
+      </figure>
+      <div class="poem-text">
+        <h3 class="poem-title">My Mother's Garden</h3>
+        <p>I know my soulmate is my mother. From the day I was born until the day I die, my mother will always be my entire heart. Her kindness lives in me, and her love has bloomed a thousand roses in my soul. My life is just me tending to the roses the world keeps trampling upon, while making sure I pluck away all the weeds that have snuck themselves in.</p>
+        <p class="poem-refrain">I am tending her garden.</p>
+        <p>They say God is the supreme lover — that you will be liberated from the painful cycle of rebirth and reach his heaven when you surrender all your love to him. I will still choose to pluck weeds and tend her rose garden, Lord. You must come and visit it once I am done with this lifetime, for you must see what her love has done to my soul.</p>
+        <p>All I pray to you for isn't heaven — it's a little more light and mercy for my garden, so that when my mother visits, she finds her garden even lovelier, and she can fulfil my shameless desire to be loved by her even more.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ The Creative ============ -->
   <section id="creative">
-    <p class="section-eyebrow">02 · The Creative</p>
+    <p class="section-eyebrow">03 · The Creative</p>
     <h2 class="section-title">Painting, flyers, whatever needs making</h2>
     <p class="section-body">I've always liked making things with my hands as much as with a roadmap — paintings, flyer designs, the occasional poster nobody asked for.</p>
     <div class="gallery">
@@ -267,16 +312,6 @@
       <div class="tile"><span>Flyer design — swap image</span></div>
       <div class="tile"><span>Poster concept — swap image</span></div>
       <div class="tile"><span>Mixed media — swap image</span></div>
-    </div>
-  </section>
-
-  <!-- ============ Small Words ============ -->
-  <section id="words">
-    <p class="section-eyebrow">03 · Small Words</p>
-    <h2 class="section-title">A little poetry, now and then</h2>
-    <div class="quote-block">
-      <blockquote>"Placeholder line from a poem — swap this for a real excerpt whenever you're ready."</blockquote>
-      <p class="quote-meta">— an excerpt, more soon</p>
     </div>
   </section>
 
