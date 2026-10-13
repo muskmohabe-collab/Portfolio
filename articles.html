@@ -180,6 +180,13 @@
   .article-body figcaption{ font-size:0.8rem; color:var(--muted); margin-top:0.6rem; text-align:center; }
   .article-hero.has-img{ aspect-ratio:auto; background:none; border:none; }
   .article-hero.has-img img{ width:auto; max-width:100%; height:auto; max-height:78vh; display:block; margin:0 auto; border-radius:2px; }
+  .epigraph{ margin:0 0 2.6rem 0; padding:0 0 2.2rem 0; border-bottom:1px solid var(--line); }
+  .epigraph blockquote{
+    margin:0; padding-left:1.2rem; border-left:2px solid rgba(255,255,255,0.35);
+    font-family:'Fraunces', serif; font-weight:400; font-size:1.2rem; line-height:1.6; color:#f1f1f1;
+  }
+  .epigraph-cite{ margin:0.9rem 0 0 1.2rem; font-size:0.8rem; letter-spacing:0.06em; color:var(--muted); }
+  .epigraph-note{ margin:1.6rem 0 0 0; font-style:italic; font-size:1rem; line-height:1.75; color:#cfcfcf; }
   .linkedin-btn{
     display:inline-block; margin:1.4rem 0 2rem 0; padding:0.8rem 1.4rem;
     border:1px solid rgba(255,255,255,0.4); border-radius:2px;
@@ -246,6 +253,7 @@
      tag, title, date, excerpt  – shown on the card
      cover, coverPosition       – image file + which part shows in the card crop
      linkedin                   – link for the "Read on LinkedIn" button (leave "" to hide it)
+     epigraph (optional)        – { quote, cite, note } shown under the image, before the title
      body – list of blocks, in order:
        "text"                         a paragraph (may contain <strong>, <em>, <a>)
        { h: "Heading" }               a subheading
@@ -261,7 +269,7 @@ const articles = [
     cover: "images/articles/convincing-liar.jpg",
     coverPosition: "center 22%",
     coverAlt: "Engraving-style illustration of a figure with glowing orange eyes biting into a human brain",
-    linkedin: "",
+    linkedin: "https://lnkd.in/p/e2-ivdqV",
     body: [
       "Somewhere in the middle of writing my research paper, I realised I wasn't actually scared of the thing everyone talks about. Not robots taking over. Not some dramatic sci-fi ending. What genuinely worried me was the fact that our autonomy can be hijacked so quietly — and oh, so very conveniently. It's a checkout page timer that isn't real. It's a doctor half-trusting a drug recommendation that was never actually verified. It's a law that was written for a world that no longer exists.",
       "Artificial intelligence doesn't just make mistakes. Sometimes, it deceives us. On purpose, and — even stranger — sometimes without meaning to at all.",
@@ -296,6 +304,35 @@ const articles = [
       "I don't think this is about being anti-AI. I don't think it ever was. AI is one of the most powerful things we've built, and it's already doing real good — in medicine, in accessibility, in things I genuinely care about becoming part of as a future product manager.",
       "But power without accountability doesn't announce itself. It doesn't come as a dramatic takeover. It comes quietly, as a timer that was never real, a fact that was never true, a video that never happened. The goal was never to slow AI down. It's to make sure that as it grows, it grows inside something that keeps it honest — so it stays the helpful thing it's capable of being, instead of becoming the convincing liar it's just as capable of being.",
       "So next time something online feels a little too convenient, a little too certain — ask yourself who built it that way, and why."
+    ]
+  },
+  {
+    tag: "UX",
+    title: "Movement as Material of Design",
+    date: "",
+    excerpt: "Same action, completely different felt quality — why great products design for how movement feels, not just what it does.",
+    cover: "images/articles/the-thinker.jpg",
+    coverPosition: "center 12%",
+    coverAlt: "Black-and-white photo of Rodin's sculpture The Thinker, seen from below against a cloudy sky",
+    linkedin: "https://lnkd.in/p/eEmEBt2Z",
+    epigraph: {
+      quote: "What makes my Thinker think is that he thinks not only with his brain, with his knitted brow, his distended nostrils and compressed lips, but with every muscle of his arms, back, and legs, with his clenched fist and gripping toes.",
+      cite: "Auguste Rodin, on <em>The Thinker</em>",
+      note: "Much like the Thinker here, when we understand that it's not just the mind but also the body which participates in meaning-making, we take a step forward towards Embodied Interaction."
+    },
+    body: [
+      "Imagine picking up a cup of water to move it from point A to point B.",
+      "In your head, you just moved it. Simple.",
+      "But what if the cup was filled to the brim? Your movement would have been softer, slower, more deliberate. What if water was condensed on the outside? Your grip would have tightened. Your flow of action would have become more restricted.",
+      "Same action. Completely different felt quality.",
+      "This is the kind of gap that stops a product from being great.",
+      "We understand movement — but we forget to account for the FELT qualities of movement. And that gap matters enormously in the world of VR, motion-based interfaces, and any product where a human body is the input.",
+      "I had the opportunity to lead my class as part of an assignment on \"Embodied Interaction through Movement in a Coursework\" by Erkut & Dahl (2017) — and papers like this exist precisely because this gap exists.",
+      "Researchers Gillies & Kleinsmith, who were cited in the paper, put it sharply: designers are forced to explicitly represent movement in numerical terms — data, code, formal tools — but they do not have access to their own complex sensorimotor skills. So they fall back on simple features, aka lower variables — position, velocity — or traditional UI metaphors like buttons in 3D space.",
+      "Not because it is better design. Because it is easier to represent in code.",
+      "<strong>For developers</strong>, what this means is: take inspiration from your own sensorimotor experience. Instead of if-else logic — if hand moves here, trigger this — develop continuous mapping that responds to HOW movement feels. Smooth or sharp. Heavy or light. Fluid or bound.",
+      "<strong>For product managers</strong>, it means something just as important: we cannot only design for what users DO. We must design for what the experience FEELS like to do. The best products are not just functionally sound — they feel like something. And the gap between a good product and a great one often lives exactly there — in the felt quality we forgot to account for.",
+      "Just like the cup of water."
     ]
   }
 ];
@@ -337,6 +374,11 @@ function openArticle(a, glyph){
     <div class="article-hero${a.cover ? ' has-img' : ''}">
       ${a.cover ? `<img src="${a.cover}" alt="${a.coverAlt || ''}">` : `<span class="glyph">${glyph}</span>`}
     </div>
+    ${a.epigraph ? `<div class="epigraph">
+      <blockquote>“${a.epigraph.quote}”</blockquote>
+      ${a.epigraph.cite ? `<p class="epigraph-cite">— ${a.epigraph.cite}</p>` : ''}
+      ${a.epigraph.note ? `<p class="epigraph-note">${a.epigraph.note}</p>` : ''}
+    </div>` : ''}
     <span class="article-tag">${a.tag}${a.date ? ` &nbsp;·&nbsp; ${a.date}` : ''}</span>
     <h1 class="article-title">${a.title}</h1>
     <div class="article-body">${a.body.map(renderBlock).join('')}</div>
