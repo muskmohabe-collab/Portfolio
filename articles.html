@@ -187,6 +187,11 @@
   }
   .epigraph-cite{ margin:0.9rem 0 0 1.2rem; font-size:0.8rem; letter-spacing:0.06em; color:var(--muted); }
   .epigraph-note{ margin:1.6rem 0 0 0; font-style:italic; font-size:1rem; line-height:1.75; color:#cfcfcf; }
+  .pull-quote{
+    margin:1.6rem 0 2rem 0; padding-left:1.2rem; border-left:2px solid rgba(255,255,255,0.35);
+    font-family:'Fraunces', serif; font-size:1.15rem; line-height:1.65; color:#f1f1f1;
+  }
+  .pull-quote cite{ display:block; margin-top:0.8rem; font-family:'Inter', sans-serif; font-style:normal; font-size:0.8rem; letter-spacing:0.06em; color:var(--muted); }
   .linkedin-btn{
     display:inline-block; margin:1.4rem 0 2rem 0; padding:0.8rem 1.4rem;
     border:1px solid rgba(255,255,255,0.4); border-radius:2px;
@@ -259,6 +264,7 @@
        { h: "Heading" }               a subheading
        { list: ["item", "item"] }     a bullet list
        { img: "images/...", alt: "" } an image inside the article
+       { quote: "...", cite: "" }     a pull quote
 */
 const articles = [
   {
@@ -334,6 +340,36 @@ const articles = [
       "<strong>For product managers</strong>, it means something just as important: we cannot only design for what users DO. We must design for what the experience FEELS like to do. The best products are not just functionally sound — they feel like something. And the gap between a good product and a great one often lives exactly there — in the felt quality we forgot to account for.",
       "Just like the cup of water."
     ]
+  },
+  {
+    tag: "Management",
+    title: "Stranger than Fiction: The Story of the Opera House from a Management Lens",
+    date: "September 30, 2025",
+    excerpt: "Fourteen years, a 1,400% cost overrun and a story stranger than fiction — what the Sydney Opera House teaches us about managing big, bold projects.",
+    cover: "images/articles/opera-house.jpg",
+    coverPosition: "center 85%",
+    coverAlt: "White line-art of the Sydney Opera House sails on a dark background",
+    linkedin: "https://lnkd.in/p/eZ4ZGwwP",
+    body: [
+      "The Sydney Opera House is a marvel that people all over the world dream of visiting once in their lifetime. Yet its awe-inspiring presence belies an equally astonishing, and at times troubled and strange, genesis. The Opera House is a building beloved by everyone, but the 14 dreadful years it took to build it unfolded strange, complex and hurtful chapters — lessons for creators, managers, governments and stakeholders worldwide.",
+
+      { h: "Unfolding the History and Context" },
+      "The Sydney Opera House is the vision of Danish architect Jørn Utzon — a dyslexic and dyscalculic engineer whose grit and passion allowed him to create many masterpieces in his lifetime, like the National Assembly of Kuwait. He won the design competition held by the New South Wales (NSW) government for the Sydney Opera House, beating 233 entries from 32 countries.",
+      "In the later phases, amid tension and a deteriorating relationship with the government, Utzon left, and a new Aussie architect, Peter Hall, was hired. Among architects, this was considered a betrayal of Utzon's vision. Hall was reluctant, but his genius provided safety nets for the Opera House while he navigated the unresolved issues. He managed to finish the project in a mere seven years.",
+      "The timeline defined at the beginning of the project in 1957 was for the Opera House to be built in 4 years, at an estimated cost of AU$7 million. Instead, it took 14 years in total and AU$102 million — 10 years behind schedule, with a cost overrun of 1,400%. To help fund the inflated and uncontrolled budget, the project's boosters decided to hold lotteries to raise money. In 1960, a fired salesman kidnapped and murdered an eight-year-old boy in the hope of extorting money from an Australian couple who had won the lottery, forever leaving a gut-wrenching red mark on the history of the Opera House.",
+
+      { h: "What Went Wrong, from a Management Perspective" },
+      "<strong>One: Frequent design changes and no change control management.</strong> Often, if not always, the elephant in the room is not the scope creep itself but the fact that nobody wants to recognise it's there and act on it. Hall worked with British engineer Ove Arup, and they frequently changed plans, which ultimately led to the cost overruns and delays.",
+      "Having a change control team in place would have brought some control over the plans and delays. A project of this scale cannot afford the luxury of plan changes, let alone frequent ones.",
+      "<strong>Two: Unrealistic timeline and budget allocation.</strong> A thousand rooms, 1,056,000 glazed tiles imported from Sweden, 6,225 square metres of special glass from France and a lot more. To think that 4 years and a low estimate of AU$7 million were allocated to this project — at a time when they had to invent a whole new software to work through the calculations this structure needed — is wild. It was always bound to run past its deadlines and over its budget.",
+      "<strong>Three: Stakeholder management and conflicts.</strong> Stakeholder interests were mismanaged. When Robert Askin was elected as the new Premier of New South Wales, his Minister for Public Works, Davis Hughes, became a vocal critic of Utzon, scrutinising cost overruns and design progress. The deteriorating relationship and increasing demands ultimately led to Utzon's resignation, leaving him feeling he had no option but to leave.",
+      "Utzon wasn't protected by any management layer; he was dealing directly with the government. A team aligned with him from the very start, handling the rest of the stakeholder management, would have put a lot less on his plate. Small things, like giving him a grace of, let's say, 10% on the budget, would have helped too.",
+      "<strong>Four: Quality and technical management.</strong> A lot of the design was beyond what was buildable at the time, which created delays. Innovations had to be made during the project to make it \"possible\" — a feat in itself — but the ever-ballooning cost and ticking clock did not help. Hall, who took over Utzon's vision, made new safety-based changes to the existing structure and also put forth new design changes.",
+
+      "The creation and existence of the Opera House is an architectural feat on its own, a reflection of modern architecture, and it has contributed so much to architecture and engineering.",
+      "But as Rogove says:",
+      { quote: "Squabbling creators, the kidnapping and murder of an eight-year-old boy, the engineer getting hit by a bus and having to design from his hospital bed in a full-body cast, Utzon missing a flight that crashed and killed everyone on board, and a politician that spent every waking minute trying to kill the project. It is a crazy story, one befitting of such a magnificent building, but truly one that is stranger than fiction.", cite: "Rogove" }
+    ]
   }
 ];
 
@@ -365,6 +401,7 @@ function renderBlock(b){
   if (typeof b === 'string') return `<p>${b}</p>`;
   if (b.h) return `<h2>${b.h}</h2>`;
   if (b.list) return `<ul>${b.list.map(li => `<li>${li}</li>`).join('')}</ul>`;
+  if (b.quote) return `<blockquote class="pull-quote">“${b.quote}”${b.cite ? `<cite>— ${b.cite}</cite>` : ''}</blockquote>`;
   if (b.img) return `<figure><img src="${b.img}" alt="${b.alt || ''}" loading="lazy">${b.caption ? `<figcaption>${b.caption}</figcaption>` : ''}</figure>`;
   return '';
 }
