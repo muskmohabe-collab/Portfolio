@@ -112,9 +112,10 @@
   }
   .article-grid{
     max-width: 1040px; margin: 0 auto;
-    display:grid; grid-template-columns: repeat(3, 1fr);
+    display:flex; flex-wrap:wrap; justify-content:center;
     gap: 1.6rem;
   }
+  .article-grid .card{ flex: 0 1 calc((100% - 3.2rem) / 3); }
   .card{ cursor:pointer; text-align:left; display:flex; flex-direction:column; gap:0.9rem; }
   .card-thumb{
     position:relative; aspect-ratio: 4 / 3; border-radius: 2px; overflow:hidden;
@@ -133,7 +134,7 @@
   /* ---------- Reading modal ---------- */
   .modal-overlay{
     position:fixed; inset:0; z-index:30;
-    background: rgba(0,0,0,0.94);
+    background: rgba(0,0,0,0.985);
     display:flex; align-items:flex-start; justify-content:center;
     opacity:0; pointer-events:none;
     transition: opacity 0.35s ease;
@@ -166,13 +167,37 @@
   }
   .article-body{ font-family:'Inter', sans-serif; font-size:1rem; line-height:1.8; color:#d8d8d8; }
   .article-body p{ margin: 0 0 1.2rem 0; }
+  .article-body strong{ color:#fff; font-weight:600; }
+  .article-body h2{
+    font-family:'Fraunces', serif; font-weight:500; color:#fff;
+    font-size:1.45rem; line-height:1.25; margin:2.6rem 0 1rem 0;
+  }
+  .article-body ul{ margin:0 0 1.4rem 0; padding-left:1.2rem; }
+  .article-body li{ margin:0 0 0.8rem 0; padding-left:0.3rem; }
+  .article-body li::marker{ color:var(--muted); }
+  .article-body figure{ margin:2rem 0; }
+  .article-body figure img{ width:100%; height:auto; display:block; border-radius:2px; }
+  .article-body figcaption{ font-size:0.8rem; color:var(--muted); margin-top:0.6rem; text-align:center; }
+  .article-hero.has-img{ aspect-ratio:auto; background:none; border:none; }
+  .article-hero.has-img img{ width:auto; max-width:100%; height:auto; max-height:78vh; display:block; margin:0 auto; border-radius:2px; }
+  .linkedin-btn{
+    display:inline-block; margin:1.4rem 0 2rem 0; padding:0.8rem 1.4rem;
+    border:1px solid rgba(255,255,255,0.4); border-radius:2px;
+    color:#fff; text-decoration:none; font-size:0.9rem; letter-spacing:0.04em;
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+  .linkedin-btn:hover{ background:#fff; color:#000; }
 
   @media (max-width: 780px){
-    .article-grid{ grid-template-columns: repeat(2, 1fr); gap:1.1rem; }
+    .article-grid{ gap:1.1rem; }
+    .article-grid .card{ flex-basis: calc((100% - 1.1rem) / 2); }
   }
   @media (max-width: 640px){
     .name-tag{ top:1.4rem; left:6vw; }
     .modal-close{ top:1.4rem; right:6vw; }
+  }
+  @media (max-width: 560px){
+    .article-grid .card{ flex-basis: 100%; }
   }
 </style>
 </head>
@@ -217,62 +242,81 @@
 
 <script>
 /* ================= Article data =================
-   PLACEHOLDER CONTENT — swap via the admin panel (admin-articles.html).
+   Each article:
+     tag, title, date, excerpt  – shown on the card
+     cover, coverPosition       – image file + which part shows in the card crop
+     linkedin                   – link for the "Read on LinkedIn" button (leave "" to hide it)
+     body – list of blocks, in order:
+       "text"                         a paragraph (may contain <strong>, <em>, <a>)
+       { h: "Heading" }               a subheading
+       { list: ["item", "item"] }     a bullet list
+       { img: "images/...", alt: "" } an image inside the article
 */
 const articles = [
-  { id:1, tag:"AI", glyph:"01", image:"", title:"What 'agentic' actually means for PMs",
-    excerpt:"A field guide to the term everyone's using and nobody's defining the same way.",
-    content:[
-      "Every roadmap review this year has had at least one slide with the word 'agentic' on it, usually without a shared definition underneath.",
-      "This is my working definition, built from six months of shipping features that touch autonomous behavior: an agentic system is one that chooses its own next action from a set of tools, not just its own output from a fixed prompt.",
-      "That distinction matters for how you scope, test, and ship these features — and it's the difference between a chatbot with extra steps and something genuinely new."
-    ]},
-  { id:2, tag:"Tech", glyph:"02", image:"", title:"The best PM decision I made was to stop demoing",
-    excerpt:"Why I switched from Friday demos to Friday 'break it' sessions.",
-    content:[
-      "Demos are theater. Everyone nods, nobody pokes at the edges, and the bugs show up in production a week later.",
-      "So we replaced the standard demo with a 30-minute session where the goal is explicitly to break the feature, live, in front of the team that built it.",
-      "The vibe shift was immediate — and so was the drop in post-launch bug tickets."
-    ]},
-  { id:3, tag:"Life", glyph:"03", image:"", title:"Two years, six clients, one lesson",
-    excerpt:"What working across timezones and industries taught me about scope.",
-    content:[
-      "Every client thinks their constraints are unique. Most of the time, the shape of the problem repeats — what's actually unique is what they're willing to trade off.",
-      "Learning to ask 'what are you willing to lose' early saved more timelines than any roadmap template ever did."
-    ]},
-  { id:4, tag:"AI", glyph:"04", image:"", title:"Prompt reviews are the new code reviews",
-    excerpt:"A lightweight process for teams shipping LLM-backed features.",
-    content:[
-      "If your product has a prompt in it, that prompt is now part of your codebase — and it deserves the same review rigor.",
-      "Here's the lightweight checklist my team uses before any prompt change ships."
-    ]},
-  { id:5, tag:"Tech", glyph:"05", image:"", title:"Shipping fast without shipping scared",
-    excerpt:"Notes on velocity that doesn't burn out the team building it.",
-    content:[
-      "Speed and quality aren't actually opposites — but speed and fear absolutely are.",
-      "A few of the guardrails that let my teams move fast without white-knuckling every release."
-    ]},
-  { id:6, tag:"Life", glyph:"06", image:"", title:"On being the youngest person in the room",
-    excerpt:"What I've learned about earning trust before earning tenure.",
-    content:[
-      "For most of the last two years, I've been the youngest person in almost every room I've worked in.",
-      "Here's what actually built credibility faster than waiting it out."
-    ]}
+  {
+    tag: "AI",
+    title: "The Convincing Liar in the Room",
+    date: "July 31, 2026",
+    excerpt: "AI doesn't just make mistakes — sometimes it deceives us. On why the real danger isn't the lie, it's how good it sounds.",
+    cover: "images/articles/convincing-liar.jpg",
+    coverPosition: "center 22%",
+    coverAlt: "Engraving-style illustration of a figure with glowing orange eyes biting into a human brain",
+    linkedin: "",
+    body: [
+      "Somewhere in the middle of writing my research paper, I realised I wasn't actually scared of the thing everyone talks about. Not robots taking over. Not some dramatic sci-fi ending. What genuinely worried me was the fact that our autonomy can be hijacked so quietly — and oh, so very conveniently. It's a checkout page timer that isn't real. It's a doctor half-trusting a drug recommendation that was never actually verified. It's a law that was written for a world that no longer exists.",
+      "Artificial intelligence doesn't just make mistakes. Sometimes, it deceives us. On purpose, and — even stranger — sometimes without meaning to at all.",
+
+      { h: "Two Ways to Lie" },
+      "Artificial intelligence deceives us in two ways:",
+      "<strong>Learned deception:</strong> There's the kind AI is taught to do. Think of a shopping site flashing \"Only 2 left!\" when the warehouse is full, or hiding the cancel button so your thumb finds \"Buy Now\" instead. Someone designed that. Someone decided your hesitation was a problem to be engineered away. Deepfakes live here too — a video of someone saying something they never said isn't a glitch, it's a choice, made real.",
+      "<strong>Unlearned deception:</strong> Then there is the kind nobody explicitly taught it to do. AI hallucination is exactly what it sounds like: the model produces something false with complete confidence. Not because it is intentionally lying, but because it has learned patterns from its training data that make an answer sound right. Think of it this way: if an AI learns that action X usually leads to outcome Y, it may start associating the two. But the problem is, it does not always understand whether X actually happened or whether X is even true. It only understands the pattern.",
+      "So, it may confidently tell a user that something happened because, based on what it learned, that answer appears to lead to the desired result.",
+
+      { h: "The Danger Isn't the Lie — It's How Good It Sounds" },
+      "AI doesn't just spread wrong information — it spreads it beautifully. There's a term for this: explainability pitfalls. An AI can hand you a clean, confident explanation for something it's actually just guessing at. \"I'm 99% sure this is safe.\" Said with zero data behind it, but every ounce of certainty in the delivery.",
+      "And that's the trick, isn't it? We don't fall for things that sound fake. We fall for things that sound sure. \"This medicine does not harm pregnant women.\" Said with the same tone as a fact. Now put that sentence in a hospital, next to a doctor who's stretched thin and trusts the machine a little too much. That's not hypothetical anymore. That's just Wednesday.",
+      "Add the constant nudging — the same suggestion, again and again, until you stop noticing you're being steered — and you start to see the real cost. Not your wallet. Your freedom to actually choose.",
+
+      { h: "So Where Are the Laws?" },
+      "The EU AI Act gets held up as the gold standard, and even that can't clearly define what \"high-risk\" AI actually means. When the definition is not clear, the loophole writes itself — a company can always say they didn't know.",
+      "And Europe is ahead. In India, there's barely any AI-specific law at all, which means manipulative ads and dark patterns run with almost no consequence. This isn't a Western problem or a \"someday, somewhere else\" problem. It's already everywhere, and the rules protecting you depend entirely on which country you happened to be born in.",
+
+      { h: "What Actually Fixes This" },
+      "I didn't want to end this research on doom, because I don't think doom is honest either. There are real paths forward:",
+      { list: [
+        "Laws that name the behavior outright — no vague \"high-risk\" language, just \"no hidden cancel buttons,\" \"no fabricated urgency,\" said plainly enough that no one can claim ignorance.",
+        "Bringing psychology into the room, not just engineers and lawyers, because AI manipulates through the same cognitive shortcuts psychologists have studied for decades.",
+        "Companies running real audits on their own systems, the way you'd get a check-up — not because someone's watching, but because it's the responsible thing to do.",
+        "Tools and counter-algorithms that let regular people fight back, flag fakes, and verify what they're seeing.",
+        "Countries actually agreeing on shared standards, so companies can't just relocate to wherever the rules are loosest.",
+        "And, maybe most importantly, letting regular people into the conversation — teachers, nurses, your neighbour — not just the people who happen to be in IT."
+      ]},
+
+      { h: "Where I Landed" },
+      "I don't think this is about being anti-AI. I don't think it ever was. AI is one of the most powerful things we've built, and it's already doing real good — in medicine, in accessibility, in things I genuinely care about becoming part of as a future product manager.",
+      "But power without accountability doesn't announce itself. It doesn't come as a dramatic takeover. It comes quietly, as a timer that was never real, a fact that was never true, a video that never happened. The goal was never to slow AI down. It's to make sure that as it grows, it grows inside something that keeps it honest — so it stays the helpful thing it's capable of being, instead of becoming the convincing liar it's just as capable of being.",
+      "So next time something online feels a little too convenient, a little too certain — ask yourself who built it that way, and why."
+    ]
+  }
 ];
 
 const grid = document.getElementById('articleGrid');
-articles.forEach((a) => {
+articles.forEach((a, i) => {
+  const glyph = String(i + 1).padStart(2, '0');
   const card = document.createElement('div');
   card.className = 'card';
+  card.tabIndex = 0;
+  card.setAttribute('role', 'button');
   card.innerHTML = `
     <div class="card-thumb">
-      ${a.image ? `<img src="${a.image}" alt="">` : `<span class="glyph">${a.glyph}</span>`}
+      ${a.cover ? `<img src="${a.cover}" alt="${a.coverAlt || ''}" loading="lazy" style="object-position:${a.coverPosition || 'center'}">` : `<span class="glyph">${glyph}</span>`}
     </div>
     <span class="card-tag">${a.tag}</span>
     <p class="card-title">${a.title}</p>
     <p class="card-excerpt">${a.excerpt}</p>
   `;
-  card.addEventListener('click', () => openArticle(a));
+  card.addEventListener('click', () => openArticle(a, glyph));
+  card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openArticle(a, glyph); } });
   grid.appendChild(card);
 });
 
@@ -280,14 +324,23 @@ const readOverlay = document.getElementById('readOverlay');
 const readClose = document.getElementById('readClose');
 const articleBox = document.getElementById('articleBox');
 
-function openArticle(a){
+function renderBlock(b){
+  if (typeof b === 'string') return `<p>${b}</p>`;
+  if (b.h) return `<h2>${b.h}</h2>`;
+  if (b.list) return `<ul>${b.list.map(li => `<li>${li}</li>`).join('')}</ul>`;
+  if (b.img) return `<figure><img src="${b.img}" alt="${b.alt || ''}" loading="lazy">${b.caption ? `<figcaption>${b.caption}</figcaption>` : ''}</figure>`;
+  return '';
+}
+
+function openArticle(a, glyph){
   articleBox.innerHTML = `
-    <div class="article-hero">
-      ${a.image ? `<img src="${a.image}" alt="">` : `<span class="glyph">${a.glyph}</span>`}
+    <div class="article-hero${a.cover ? ' has-img' : ''}">
+      ${a.cover ? `<img src="${a.cover}" alt="${a.coverAlt || ''}">` : `<span class="glyph">${glyph}</span>`}
     </div>
-    <span class="article-tag">${a.tag}</span>
+    <span class="article-tag">${a.tag}${a.date ? ` &nbsp;·&nbsp; ${a.date}` : ''}</span>
     <h1 class="article-title">${a.title}</h1>
-    <div class="article-body">${a.content.map(p => `<p>${p}</p>`).join('')}</div>
+    <div class="article-body">${a.body.map(renderBlock).join('')}</div>
+    ${a.linkedin ? `<a class="linkedin-btn" href="${a.linkedin}" target="_blank" rel="noopener">Read on LinkedIn ↗</a>` : ''}
   `;
   readOverlay.classList.add('open');
   readOverlay.scrollTop = 0;
