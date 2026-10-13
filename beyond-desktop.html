@@ -102,21 +102,6 @@
   }
   @keyframes slowspin{ from{ transform:rotate(0deg);} to{ transform:rotate(360deg);} }
 
-  /* ---------- The Creative: gallery grid ---------- */
-  .gallery{
-    display:grid; grid-template-columns: repeat(4, 1fr); gap:1.2rem; margin-top:3rem;
-  }
-  .tile{
-    aspect-ratio: 3/4; border-radius:2px; overflow:hidden;
-    background: linear-gradient(160deg, #2a1f11, #120d08 75%);
-    border:1px solid var(--line);
-    display:flex; align-items:center; justify-content:center;
-    transition: transform 0.3s ease, border-color 0.3s ease;
-  }
-  .tile:hover{ transform: translateY(-4px); border-color: rgba(227,179,101,0.4); }
-  .tile span{ font-family:'Fraunces', serif; font-size:0.8rem; color:var(--muted); text-align:center; padding:0 0.6rem; }
-  @media (max-width:780px){ .gallery{ grid-template-columns: repeat(2,1fr); } }
-
   /* ---------- Chasing Light: swipeable photo panel ---------- */
   .light-carousel{ margin-top:3rem; position:relative; }
   .lc-track{
@@ -157,6 +142,8 @@
   .lc-arrow:hover{ background:rgba(18,13,8,0.8); }
   .lc-arrow[disabled]{ opacity:0; pointer-events:none; }
   .lc-prev{ left:0.9rem; } .lc-next{ right:0.9rem; }
+  .light-carousel.is-vertical{ max-width:520px; margin-left:auto; margin-right:auto; }
+  .light-carousel.is-vertical .lc-track{ aspect-ratio: 4 / 5; }
   .lc-dots{ display:flex; justify-content:center; gap:0.6rem; margin-top:1.1rem; }
   .lc-dot{
     width:8px; height:8px; padding:0; border-radius:50%; border:none; cursor:pointer;
@@ -261,7 +248,7 @@
     <h2 class="section-title">Sun</h2>
     <p class="section-body">I'm a heliophile — someone who is drawn to sunlight, quite literally. Sunrises, trails, golden-hour walks, a window seat with the light pouring in: that's where I'm happiest. There's a particular kind of quiet on a trail before sunrise, and I chase that light with a camera more often than makes sense. It's the closest thing I have to a reset button.</p>
     <div class="light-carousel" id="lightCarousel">
-      <div class="lc-track" id="lcTrack" tabindex="0" role="region" aria-roledescription="carousel" aria-label="My sun photos">
+      <div class="lc-track" tabindex="0" role="region" aria-roledescription="carousel" aria-label="My sun photos">
         <figure class="lc-slide lc-art" aria-label="Slide 1 of 4">
           <p class="light-caption">Swipe to see the sun through my lens — a few of my recent shots.</p>
         </figure>
@@ -278,9 +265,9 @@
           <img class="lc-img" src="images/beyond/sun-skyline.jpg" alt="A red sun setting over a city skyline, seen through a chain-link fence" loading="lazy">
         </figure>
       </div>
-      <button class="lc-arrow lc-prev" id="lcPrev" aria-label="Previous photo">&#8249;</button>
-      <button class="lc-arrow lc-next" id="lcNext" aria-label="Next photo">&#8250;</button>
-      <div class="lc-dots" id="lcDots" role="tablist" aria-label="Choose a photo"></div>
+      <button class="lc-arrow lc-prev" aria-label="Previous photo">&#8249;</button>
+      <button class="lc-arrow lc-next" aria-label="Next photo">&#8250;</button>
+      <div class="lc-dots" role="group" aria-label="Choose a photo"></div>
     </div>
   </section>
 
@@ -307,11 +294,20 @@
     <p class="section-eyebrow">03 · The Creative</p>
     <h2 class="section-title">Painting, flyers, whatever needs making</h2>
     <p class="section-body">I've always liked making things with my hands as much as with a roadmap — paintings, flyer designs, the occasional poster nobody asked for.</p>
-    <div class="gallery">
-      <div class="tile"><span>Painting — swap image</span></div>
-      <div class="tile"><span>Flyer design — swap image</span></div>
-      <div class="tile"><span>Poster concept — swap image</span></div>
-      <div class="tile"><span>Mixed media — swap image</span></div>
+    <div class="light-carousel is-vertical" id="artCarousel">
+      <div class="lc-track" tabindex="0" role="region" aria-roledescription="carousel" aria-label="My paintings">
+        <figure class="lc-slide" aria-label="Painting 1 of 2">
+          <img class="lc-bg" src="images/beyond/painting-cat-rain.jpg" alt="" aria-hidden="true" loading="lazy">
+          <img class="lc-img" src="images/beyond/painting-cat-rain.jpg" alt="Acrylic painting of a cat sitting on a windowsill, watching rain run down the glass over a green garden with a flowering bush" loading="lazy">
+        </figure>
+        <figure class="lc-slide" aria-label="Painting 2 of 2">
+          <img class="lc-bg" src="images/beyond/painting-candle.jpg" alt="" aria-hidden="true" loading="lazy">
+          <img class="lc-img" src="images/beyond/painting-candle.jpg" alt="Painting of a tall red candle with a glowing flame against a dark background of soft bokeh lights" loading="lazy">
+        </figure>
+      </div>
+      <button class="lc-arrow lc-prev" aria-label="Previous painting">&#8249;</button>
+      <button class="lc-arrow lc-next" aria-label="Next painting">&#8250;</button>
+      <div class="lc-dots" role="group" aria-label="Choose a painting"></div>
     </div>
   </section>
 
@@ -399,18 +395,17 @@
 </script>
 
 <script>
-/* ---------- Chasing Light carousel ---------- */
-(function(){
-  const track = document.getElementById('lcTrack');
-  if (!track) return;
+/* ---------- Swipeable carousels (sun photos, paintings) ---------- */
+document.querySelectorAll('.light-carousel').forEach((root) => {
+  const track = root.querySelector('.lc-track');
   const slides = Array.from(track.children);
-  const dotsWrap = document.getElementById('lcDots');
-  const prev = document.getElementById('lcPrev');
-  const next = document.getElementById('lcNext');
+  const dotsWrap = root.querySelector('.lc-dots');
+  const prev = root.querySelector('.lc-prev');
+  const next = root.querySelector('.lc-next');
   const dots = slides.map((_, i) => {
     const d = document.createElement('button');
     d.className = 'lc-dot'; d.type = 'button';
-    d.setAttribute('aria-label', 'Photo ' + (i + 1) + ' of ' + slides.length);
+    d.setAttribute('aria-label', 'Show ' + (i + 1) + ' of ' + slides.length);
     d.addEventListener('click', () => go(i));
     dotsWrap.appendChild(d);
     return d;
@@ -432,10 +427,10 @@
     if (e.key === 'ArrowRight'){ e.preventDefault(); go(index() + 1); }
     if (e.key === 'ArrowLeft'){ e.preventDefault(); go(index() - 1); }
   });
-  let t; track.addEventListener('scroll', () => { cancelAnimationFrame(t); t = requestAnimationFrame(update); }, { passive:true });
+  let raf; track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); }, { passive:true });
   window.addEventListener('resize', update);
   update();
-})();
+});
 </script>
 </body>
 </html>
