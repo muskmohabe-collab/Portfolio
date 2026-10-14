@@ -253,7 +253,7 @@
     <div class="project-grid" id="caseGrid"></div>
   </section>
 
-  <section class="grid-section side">
+  <section class="grid-section side" hidden>
     <div class="grid-header">
       <h2>Side Projects</h2>
       <p>Things I build on my own time</p>
@@ -279,6 +279,7 @@
      role, setting, skills[]       – the snapshot at the top of the story
      impact: [{ value, label }]    – the results row
      body – blocks in order: "text" | { h: "Heading" } | { list: ["…"] }
+     hidden: true                  – keeps a story in the file but off the page
 */
 const caseStudies = [
   {
@@ -389,6 +390,7 @@ const caseStudies = [
     ]
   },
   {
+    hidden: true,   // on hold for now — remove this line to show it again
     tag: "Stakeholder Management",
     title: "Getting a low-priority internal tool the people it needed",
     excerpt: "My manager said no to dedicated resources. I came back with data instead of opinions — and we shipped on time.",
@@ -497,9 +499,10 @@ function makeCard(p, glyph){
   return card;
 }
 const caseGrid = document.getElementById('caseGrid');
-caseStudies.forEach((p, i) => caseGrid.appendChild(makeCard(p, String(i + 1).padStart(2, '0'))));
+caseStudies.filter(p => !p.hidden).forEach((p, i) => caseGrid.appendChild(makeCard(p, String(i + 1).padStart(2, '0'))));
+const SHOW_SIDE_PROJECTS = false;   // on hold — set to true (and remove "hidden" from the section) to bring them back
 const sideGrid = document.getElementById('projectGrid');
-sideProjects.forEach((p, i) => sideGrid.appendChild(makeCard(p, String(i + 1).padStart(2, '0'))));
+if (SHOW_SIDE_PROJECTS) sideProjects.forEach((p, i) => sideGrid.appendChild(makeCard(p, String(i + 1).padStart(2, '0'))));
 
 /* ================= Reading view ================= */
 const readOverlay = document.getElementById('readOverlay');
