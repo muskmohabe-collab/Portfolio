@@ -613,6 +613,13 @@ function openModal(){ modalOverlay.classList.add('open'); }
 function closeModal(){ modalOverlay.classList.remove('open'); }
 
 emailBtn.addEventListener('click', (e) => { e.stopPropagation(); openModal(); });
+
+/* links like index.html#contact land on the last slide with the form open */
+if (location.hash === '#contact') {
+  current = steps.length - 1;
+  render();
+  setTimeout(openModal, 350);
+}
 modalClose.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
 modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
 
@@ -660,7 +667,7 @@ contactForm.addEventListener('submit', async (e) => {
   } catch (err) {
     sendBtn.disabled = false;
     sendBtn.textContent = originalLabel;
-    modalNote.textContent = "Something went wrong sending that — please try again, or email musk.mohabe@gmail.com directly.";
+    modalNote.textContent = "Something went wrong sending that — please try again in a moment.";
   }
 });
 </script>
