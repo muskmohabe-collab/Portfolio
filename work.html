@@ -53,8 +53,8 @@
   /* ---------- Hero ---------- */
   .hero{
     min-height:100vh; min-height:100dvh;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center; padding: 10vh 6vw 4vh 6vw;
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+    text-align:center; padding: clamp(6.5rem, 15vh, 9rem) 6vw 4vh 6vw;
   }
   .eyebrow{
     font-size:0.78rem; letter-spacing:0.28em; text-transform:uppercase;
@@ -218,6 +218,14 @@
     .impact-value{ min-width:5.2rem; font-size:1.6rem; }
   }
 </style>
+<script>
+  /* hide the hero until assets/reveal.js animates it in (with a safety timeout) */
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('rv-wait');
+    setTimeout(function(){ document.documentElement.classList.remove('rv-wait'); }, 2500);
+  }
+</script>
+<style>html.rv-wait .hero{ opacity:0; }</style>
 </head>
 <body>
 
@@ -232,7 +240,7 @@
 
 <main>
   <section class="hero">
-    <p class="eyebrow">Products I've shaped, projects I've led</p>
+    <p class="eyebrow">What I've shaped and led</p>
     <h1 class="title">WORK</h1>
 
     <div class="figure-wrap" aria-hidden="true">
@@ -588,5 +596,6 @@ requestAnimationFrame(drawBG);
 </script>
 
 <script src="assets/scroll-progress.js" data-color="#ffffff" defer></script>
+<script src="assets/reveal.js" defer></script>
 </body>
 </html>

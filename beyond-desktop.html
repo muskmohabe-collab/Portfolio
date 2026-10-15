@@ -51,8 +51,8 @@
   /* ---------- Hero ---------- */
   .hero{
     min-height:100vh; min-height:100dvh;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center; padding: 10vh 6vw 6vh 6vw; max-width:1200px;
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+    text-align:center; padding: clamp(6.5rem, 15vh, 9rem) 6vw 6vh 6vw; max-width:1200px;
     position:relative; overflow:hidden;
   }
   .hero-bg{
@@ -281,6 +281,14 @@
     .vinyl, .hero-sun{ animation:none !important; }
   }
 </style>
+<script>
+  /* hide the hero until assets/reveal.js animates it in (with a safety timeout) */
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('rv-wait');
+    setTimeout(function(){ document.documentElement.classList.remove('rv-wait'); }, 2500);
+  }
+</script>
+<style>html.rv-wait .hero{ opacity:0; }</style>
 </head>
 <body>
 
@@ -497,5 +505,6 @@ document.querySelectorAll('.light-carousel').forEach((root) => {
 });
 </script>
 <script src="assets/scroll-progress.js" data-color="#f2cf8f" defer></script>
+<script src="assets/reveal.js" defer></script>
 </body>
 </html>
