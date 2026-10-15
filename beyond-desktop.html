@@ -209,45 +209,32 @@
   }
   .connect-cta{ text-align:center; margin:2.2rem 0 0 0; }
   .connect-btn{
-    position:relative; display:inline-flex; align-items:center; gap:0.85rem;
-    padding:0.55rem 1.5rem 0.55rem 0.55rem; border-radius:999px;
+    display:inline-flex; align-items:center; gap:0.9rem;
     color:var(--amber-soft); text-decoration:none;
-    background:
-      radial-gradient(120% 160% at 0% 50%, rgba(227,179,101,0.20), rgba(227,179,101,0.04) 60%),
-      rgba(18,13,8,0.6);
-    border:1px solid rgba(242,207,143,0.38);
-    box-shadow: 0 0 22px rgba(227,179,101,0.16), inset 0 0 14px rgba(227,179,101,0.08);
-    animation: connectGlow 3.2s ease-in-out infinite;
-    transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease, background .3s ease;
   }
   .connect-icon{
-    width:42px; height:42px; border-radius:50%; flex-shrink:0;
+    width:44px; height:44px; border-radius:50%; flex-shrink:0;
     display:flex; align-items:center; justify-content:center;
     background: radial-gradient(circle at 35% 30%, rgba(242,207,143,0.35), rgba(227,179,101,0.10) 70%);
     border:1px solid rgba(242,207,143,0.5);
-    box-shadow: 0 0 14px rgba(227,179,101,0.45);
+    box-shadow: 0 0 14px rgba(227,179,101,0.4);
+    animation: connectGlow 3.2s ease-in-out infinite;
+    transition: transform .3s ease, box-shadow .3s ease;
   }
   .connect-icon svg{ width:20px; height:20px; filter: drop-shadow(0 0 4px rgba(242,207,143,0.8)); }
   .connect-label{
     font-family:'Fraunces', serif; font-style:italic; font-weight:400;
     font-size:1.15rem; letter-spacing:0.01em; color:var(--ink);
+    border-bottom:1px solid transparent; transition: border-color .3s ease, color .3s ease;
   }
-  .connect-arrow{ font-size:1.05rem; transition: transform .3s ease; }
-  .connect-btn:hover{
-    transform: translateY(-2px);
-    border-color: rgba(242,207,143,0.75);
-    background:
-      radial-gradient(120% 160% at 0% 50%, rgba(227,179,101,0.32), rgba(227,179,101,0.08) 65%),
-      rgba(18,13,8,0.6);
-    box-shadow: 0 0 34px rgba(227,179,101,0.35), inset 0 0 18px rgba(227,179,101,0.12);
-  }
-  .connect-btn:hover .connect-arrow{ transform: translateX(5px); }
-  .connect-btn:focus-visible{ outline:2px solid var(--amber-soft); outline-offset:4px; }
+  .connect-btn:hover .connect-icon{ transform: scale(1.08); box-shadow: 0 0 26px rgba(227,179,101,0.7); }
+  .connect-btn:hover .connect-label{ color:var(--amber-soft); border-bottom-color: rgba(242,207,143,0.5); }
+  .connect-btn:focus-visible{ outline:2px solid var(--amber-soft); outline-offset:6px; border-radius:4px; }
   @keyframes connectGlow{
-    0%,100%{ box-shadow: 0 0 18px rgba(227,179,101,0.14), inset 0 0 14px rgba(227,179,101,0.08); }
-    50%    { box-shadow: 0 0 30px rgba(227,179,101,0.28), inset 0 0 16px rgba(227,179,101,0.12); }
+    0%,100%{ box-shadow: 0 0 12px rgba(227,179,101,0.35); }
+    50%    { box-shadow: 0 0 22px rgba(227,179,101,0.6); }
   }
-  @media (prefers-reduced-motion: reduce){ .connect-btn{ animation:none; } }
+  @media (prefers-reduced-motion: reduce){ .connect-icon{ animation:none; } }
   .connect-note a{
     color:var(--amber-soft); text-decoration:none; border-bottom:1px solid rgba(242,207,143,0.4);
     text-shadow: 0 0 10px rgba(227,179,101,0.35); white-space:nowrap;
@@ -391,7 +378,6 @@
           <svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="5.5" width="19" height="13" rx="2.4" stroke="currentColor" stroke-width="1.4"/><path d="M3.5 6.5L12 13L20.5 6.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </span>
         <span class="connect-label">Send me a message</span>
-        <span class="connect-arrow" aria-hidden="true">&rarr;</span>
       </a>
     </p>
   </section>
